@@ -1,4 +1,6 @@
+import { IRoadBoarders } from "@/types";
 import { Controls } from "../Controls";
+import { Sensors } from "../Sensors";
 
 export class Car {
   x: number;
@@ -11,6 +13,7 @@ export class Car {
   maxSpeed: number;
   friction: number;
   angle: number;
+  sensors: Sensors;
 
   constructor(x: number, y: number, width: number, height: number) {
     this.x = x;
@@ -24,14 +27,18 @@ export class Car {
     this.friction = 0.05;
     this.angle = 0;
 
+    this.sensors = new Sensors(this);
     this.controls = new Controls();
   }
 
-  update() {
+  update(
+    roadBoarders: IRoadBoarders[][]
+  ) {
     this.move();
+    this.sensors.update(roadBoarders);
   }
 
-  private move (){
+  private move() {
     if (this.controls.forward) {
       this.speed += this.acceleration;
     }
@@ -66,7 +73,6 @@ export class Car {
     this.y -= Math.cos(this.angle) * this.speed;
   }
 
-
   draw(ctx: CanvasRenderingContext2D) {
     ctx.save();
     ctx.translate(this.x, this.y);
@@ -82,5 +88,7 @@ export class Car {
     ctx.fill();
 
     ctx.restore();
+
+    this.sensors.draw(ctx);
   }
 }

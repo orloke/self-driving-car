@@ -15,7 +15,7 @@ export const Canvas = () => {
     const laneCenter = road.getLaneCenter(1);
     const car = new Car(laneCenter, 100, 30, 50);
     const animate = () => {
-      car.update();
+      car.update(road.borders);
 
       canvasRef.current!.height = window.innerHeight;
       const height = canvasRef.current!.height;
